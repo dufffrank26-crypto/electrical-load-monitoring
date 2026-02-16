@@ -1,6 +1,37 @@
 #include <iostream>
 #include <vector>
 #include "Appliance.h"
+#include <fstream>
+#include <sstream>
+
+void saveAppliances(const std::vector<Appliance>& appliances) {
+    std::ofstream file("appliances.txt");
+    if (file.is_open()) {
+        for (const auto& a : appliances) {
+            file << a.getName() << "," << a.getPowerRatingW() << "," << a.getDailyUsageHours() << "\n";
+        }
+        file.close();
+    } else {
+        std::cout << "Unable to save appliances\n";
+    }
+}
+
+void loadAppliances(std::vector<Appliance>& appliances) {
+    std::ifstream file("appliances.txt");
+    if (file.is_open()) {
+        std::string line, name;
+        double power, hours;
+        while (std::getline(file, line)) {
+            std::stringstream ss(line);
+            std::getline(ss, name, ',');
+            ss >> power;
+            ss.ignore(); // ignore comma
+            ss >> hours;
+            appliances.emplace_back(name, power, hours);
+        }
+        file.close();
+    }
+}
 
 void addAppliance(std::vector<Appliance>& appliances) {
     std::string name;
@@ -41,6 +72,7 @@ void calculateBill(double energyKwh, double ratePerKwh)
 int main() 
 {
     std::vector<Appliance> appliances;
+    loadAppliances(appliances);
     double ratePerKwh = 0.5; // example rate
 
     while (true) 
@@ -53,7 +85,7 @@ int main()
             case 1: addAppliance(appliances); break;
             case 2: viewAppliances(appliances); break;
             case 3: calculateBill(calculateTotalEnergy(appliances), ratePerKwh); break;
-            case 4: return 0;
+            case 4: saveAppliances(appliances); return 0;
             default: std::cout << "Invalid choice\n";
         }
     }
