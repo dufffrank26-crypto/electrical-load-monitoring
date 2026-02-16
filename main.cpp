@@ -85,7 +85,7 @@ int main()
             case 1: addAppliance(appliances); break;
             case 2: viewAppliances(appliances); break;
             case 3: calculateBill(calculateTotalEnergy(appliances), ratePerKwh); break;
-            case 4: saveAppliances(appliances); return 0;
+            case 4: saveAppliances(appliances) return 0;
             default: std::cout << "Invalid choice\n";
         }
     }
