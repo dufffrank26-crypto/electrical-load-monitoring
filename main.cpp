@@ -23,17 +23,37 @@ void viewAppliances(const std::vector<Appliance>& appliances) {
     }
 }
 
-int main() {
-    std::vector<Appliance> appliances;
+double calculateTotalEnergy(const std::vector<Appliance>& appliances) {
+    double total = 0;
+    for (const auto& a : appliances) {
+        total += a.calculateEnergyKwh();
+    }
+    return total;
+}
 
-    while (true) {
-        std::cout << "1. Add Appliance\n2. View Appliances\n3. Exit\n";
+void calculateBill(double energyKwh, double ratePerKwh) 
+{
+    double bill = energyKwh * ratePerKwh;
+    std::cout << "Total Energy: " << energyKwh << " kWh\n";
+    std::cout << "Bill: GHC " << bill << "\n";
+}
+
+int main() 
+{
+    std::vector<Appliance> appliances;
+    double ratePerKwh = 0.5; // example rate
+
+    while (true) 
+    {
+        std::cout << "1. Add Appliance\n2. View Appliances\n3. Calculate Bill\n4. Exit\n";
         int choice;
         std::cin >> choice;
-        switch (choice) {
+        switch (choice) 
+        {
             case 1: addAppliance(appliances); break;
             case 2: viewAppliances(appliances); break;
-            case 3: return 0;
+            case 3: calculateBill(calculateTotalEnergy(appliances), ratePerKwh); break;
+            case 4: return 0;
             default: std::cout << "Invalid choice\n";
         }
     }
